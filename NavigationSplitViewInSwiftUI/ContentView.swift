@@ -8,14 +8,35 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var someData = NewData.exampleData
+    @State private var selection: NewData?
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        
+        NavigationSplitView {
+            List(someData, selection: $selection) { data in
+                Text(data.name).tag(data)
+            }
+        } detail: {
+            Text(selection?.name ?? "Choose a data")
         }
-        .padding()
+    }
+}
+
+struct NewData: Identifiable, Hashable {
+    let id = UUID()
+    let name: String
+    let details: String
+}
+
+extension NewData {
+    static var exampleData: [NewData] {
+    [
+        .init(name: "One", details: "First"),
+        .init(name: "Two", details: "Second"),
+        .init(name: "Three", details: "Third"),
+        ]
     }
 }
 
